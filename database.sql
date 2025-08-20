@@ -35,7 +35,7 @@ CREATE TABLE modules (
   deleted_at boolean NOT NULL DEFAULT false
 );
 
-CREATE course_modules (
+CREATE TABLE course_modules (
   course_id bigint NOT NULL REFERENCES courses (id),
   module_id bigint NOT NULL REFERENCES  modules (id),
   PRIMARY KEY (course_id, module_id)
@@ -51,7 +51,7 @@ CREATE TABLE programs (
   updated_at timestamptz NOT NULL
 );
 
-CREATE program_modules (
+CREATE TABLE program_modules (
   module_id bigint NOT NULL REFERENCES  modules (id),
   program_id bigint NOT NULL REFERENCES programs (id),
   PRIMARY KEY (module_id, programs_id)
