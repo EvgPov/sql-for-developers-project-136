@@ -1,3 +1,9 @@
+-- enable the extension for password hashing
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+-- crypt('john_password', gen_salt('bf', 12))
+
+-- Add main entities to database schema
+
 CREATE TABLE lessons (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   title varchar(255) NOT NULL,
@@ -49,4 +55,24 @@ CREATE module_program (
   module_id bigint NOT NULL REFERENCES  modules (id),
   programs_id bigint NOT NULL REFERENCES programs (id),
   PRIMARY KEY (module_id, programs_id)
+);
+
+-- Add users to database schema
+
+CREATE TABLE users (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  full_name varchar(255) NOT NULL,
+  email varchar(255) UNIQUE NOT NULL,
+  password varchar(255) UNIQUE NOT NULL,
+  teaching_group_id bigint NOT NULL REFERENCES teaching_groups (id),
+  role varchar(255) NOT NULL,
+  create_at timestamptz NOT NULL,
+  update_at timestamptz NOT NULL
+);
+
+CREATE TABLE teaching_groups (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  slag varchar(255) NOT NULL,
+  create_at timestamptz NOT NULL,
+  update_at timestamptz NOT NULL
 );
