@@ -78,6 +78,7 @@ CREATE TABLE teaching_groups (
 );
 
 -- Add tables for user interaction with the platform
+
 CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
 CREATE TABLE enrollments (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -117,6 +118,26 @@ CREATE TABLE certificates (
   program_id bigint NOT NULL REFERENCES programs (id),
   url varchar(255) NOT NULL,
   issue_at timestamptz NOT NULL,
+  create_at timestamptz NOT NULL,
+  update_at timestamptz NOT NULL
+);
+
+-- Create additional content
+
+CREATE TABLE quizzes (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  lesson_id bigint NOT NULL REFERENCES lessons (id),
+  title varchar(255) NOT NULL,
+  body varchar(255) NOT NULL,
+  create_at timestamptz NOT NULL,
+  update_at timestamptz NOT NULL
+);
+
+CREATE TABLE exercises (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  lesson_id bigint NOT NULL REFERENCES lessons (id),
+  title varchar(255) NOT NULL,
+  url varchar(255) NOT NULL,
   create_at timestamptz NOT NULL,
   update_at timestamptz NOT NULL
 );
