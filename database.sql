@@ -141,3 +141,24 @@ CREATE TABLE exercises (
   create_at timestamptz NOT NULL,
   update_at timestamptz NOT NULL
 );
+
+-- Social interaction
+
+CREATE TABLE discussions (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  lesson_id bigint NOT NULL REFERENCES lessons (id),
+  body text NOT NULL,
+  create_at timestamptz NOT NULL,
+  update_at timestamptz NOT NULL
+);
+
+CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archived');
+CREATE TABLE blog (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  user_id bigint NOT NULL REFERENCES users (id),
+  title varchar(255) NOT NULL,
+  body text NOT NULL,
+  status blog_status NOT NULL,
+  create_at timestamptz NOT NULL,
+  update_at timestamptz NOT NULL
+);
