@@ -53,19 +53,19 @@ CREATE TABLE programs (
 
 CREATE module_program (
   module_id bigint NOT NULL REFERENCES  modules (id),
-  programs_id bigint NOT NULL REFERENCES programs (id),
+  program_id bigint NOT NULL REFERENCES programs (id),
   PRIMARY KEY (module_id, programs_id)
 );
 
 -- Add users to database schema
-
+CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
 CREATE TABLE users (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   full_name varchar(255) NOT NULL,
   email varchar(255) UNIQUE NOT NULL,
   password varchar(255) UNIQUE NOT NULL,
   teaching_group_id bigint NOT NULL REFERENCES teaching_groups (id),
-  role varchar(255) NOT NULL,
+  role user_role NOT NULL,
   create_at timestamptz NOT NULL,
   update_at timestamptz NOT NULL
 );
@@ -73,6 +73,50 @@ CREATE TABLE users (
 CREATE TABLE teaching_groups (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   slag varchar(255) NOT NULL,
+  create_at timestamptz NOT NULL,
+  update_at timestamptz NOT NULL
+);
+
+-- Add tables for user interaction with the platform
+CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
+CREATE TABLE enrollments (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  user_id bigint NOT NULL REFERENCES users (id),
+  program_id bigint NOT NULL REFERENCES programs (id),
+  status enrollments_status NOT NULL,
+  create_at timestamptz NOT NULL,
+  update_at timestamptz NOT NULL
+);
+
+CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
+CREATE TABLE payments (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  enrollment_id bigint NOT NULL REFERENCES enrollments (id),
+  amount numeric(10, 2) NOT NULL,
+  status  payment_status NOT NULL,
+  payment_at timestamptz NOT NULL,
+  create_at timestamptz NOT NULL,
+  update_at timestamptz NOT NULL
+);
+
+CREATE TYPE program_completions_status AS ENUM ('active', 'completed', 'pending', 'cancelled');
+CREATE TABLE program_completions (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  user_id bigint NOT NULL REFERENCES users (id),
+  program_id bigint NOT NULL REFERENCES programs (id),
+  status program_completions_status NOT NULL,
+  beginning_at timestamptz NOT NULL,
+  ending_at timestamptz NOT NULL
+  create_at timestamptz NOT NULL,
+  update_at timestamptz NOT NULL
+);
+
+CREATE TABLE certificates (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  user_id bigint NOT NULL REFERENCES users (id),
+  program_id bigint NOT NULL REFERENCES programs (id),
+  url varchar(255) NOT NULL,
+  issue_at timestamptz NOT NULL,
   create_at timestamptz NOT NULL,
   update_at timestamptz NOT NULL
 );
