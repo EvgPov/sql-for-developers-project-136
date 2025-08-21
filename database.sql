@@ -2,7 +2,7 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TYPE program_type_type AS ENUM ('intensive', 'profession');
-CREATE TYPE user_role AS ENUM ('Student', 'Teacher', 'Admin');
+CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
 CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
 CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
 CREATE TYPE program_completions_status AS ENUM ('active', 'completed', 'pending', 'cancelled');
@@ -40,8 +40,8 @@ CREATE TABLE modules (
 );
 
 CREATE TABLE course_modules (
-  module_id bigint NOT NULL REFERENCES modules (id) ON DELETE CASCADE,
-  course_id bigint NOT NULL REFERENCES courses (id) ON DELETE CASCADE,
+  module_id bigint NOT NULL REFERENCES modules (id),
+  course_id bigint NOT NULL REFERENCES courses (id),
   PRIMARY KEY (module_id, course_id)
 );
 
