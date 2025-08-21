@@ -55,8 +55,8 @@ CREATE TABLE programs (
 );
 
 CREATE TABLE program_modules (
-  program_id bigint NOT NULL REFERENCES programs (id),
-  module_id bigint NOT NULL REFERENCES  modules (id),
+  program_id bigint NOT NULL REFERENCES programs (id) ON DELETE CASCADE,
+  module_id bigint NOT NULL REFERENCES modules (id) ON DELETE CASCADE,
   PRIMARY KEY (program_id, module_id)
 );
 
