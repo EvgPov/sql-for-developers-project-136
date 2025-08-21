@@ -2,7 +2,12 @@ SET search_path TO public;
 
 -- enable the extension for password hashing
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
--- crypt('john_password', gen_salt('bf', 12))
+
+CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
+CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
+CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
+CREATE TYPE program_completions_status AS ENUM ('active', 'completed', 'pending', 'cancelled');
+CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archived');
 
 -- Add main entities to database schema
 CREATE TABLE courses (
@@ -64,7 +69,7 @@ CREATE TABLE teaching_groups (
   updated_at timestamptz
 );
 
-CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
+
 CREATE TABLE users (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name varchar(255) NOT NULL,
@@ -78,7 +83,6 @@ CREATE TABLE users (
 );
 
 -- Add tables for user interaction with the platform
-CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
 CREATE TABLE enrollments (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint NOT NULL REFERENCES users (id),
@@ -88,7 +92,7 @@ CREATE TABLE enrollments (
   updated_at timestamptz
 );
 
-CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
+
 CREATE TABLE payments (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   enrollment_id bigint NOT NULL REFERENCES enrollments (id),
@@ -99,7 +103,7 @@ CREATE TABLE payments (
   updated_at timestamptz
 );
 
-CREATE TYPE program_completions_status AS ENUM ('active', 'completed', 'pending', 'cancelled');
+
 CREATE TABLE program_completions (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint NOT NULL REFERENCES users (id),
@@ -150,7 +154,7 @@ CREATE TABLE discussions (
   updated_at timestamptz
 );
 
-CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archived');
+
 CREATE TABLE blogs (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint NOT NULL REFERENCES users (id),
