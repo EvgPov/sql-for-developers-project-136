@@ -10,7 +10,7 @@ CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archi
 
 -- Add main entities to database schema
 CREATE TABLE courses (
-  id bigint PRIMARY KEY,
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name varchar(255) NOT NULL,
   description text,
   created_at timestamptz NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE courses (
 );
 
 CREATE TABLE lessons (
-  id bigint PRIMARY KEY,
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   course_id bigint NOT NULL REFERENCES courses (id) ON DELETE CASCADE,
   name varchar(255) NOT NULL,
   content text,
@@ -31,7 +31,7 @@ CREATE TABLE lessons (
 );
 
 CREATE TABLE modules (
-  id bigint PRIMARY KEY,
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name varchar(255) NOT NULL,
   description text,
   created_at timestamptz NOT NULL,
@@ -40,13 +40,13 @@ CREATE TABLE modules (
 );
 
 CREATE TABLE course_modules (
-  module_id bigint NOT NULL REFERENCES  modules (id) ON DELETE CASCADE,
+  module_id bigint NOT NULL REFERENCES modules (id) ON DELETE CASCADE,
   course_id bigint NOT NULL REFERENCES courses (id) ON DELETE CASCADE,
   PRIMARY KEY (module_id, course_id)
 );
 
 CREATE TABLE programs (
-  id bigint PRIMARY KEY,
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name varchar(255) NOT NULL,
   price numeric(10,2) NOT NULL,
   program_type program_type_type NOT NULL,
