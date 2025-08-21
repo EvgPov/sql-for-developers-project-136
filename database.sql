@@ -28,7 +28,6 @@ CREATE TABLE lessons (
 
 CREATE TABLE modules (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  -- course_id bigint NOT NULL REFERENCES courses (id),
   name varchar(255) NOT NULL,
   description text NOT NULL,
   created_at timestamptz NOT NULL,
@@ -44,7 +43,6 @@ CREATE TABLE course_modules (
 
 CREATE TABLE programs (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  -- module_id bigint NOT NULL REFERENCES modules (id),
   name varchar(255) NOT NULL,
   price numeric(10,2) NOT NULL,
   program_type varchar(255) NOT NULL,
@@ -80,7 +78,6 @@ CREATE TABLE users (
 );
 
 -- Add tables for user interaction with the platform
-
 CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
 CREATE TABLE enrollments (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -125,7 +122,6 @@ CREATE TABLE certificates (
 );
 
 -- Create additional content
-
 CREATE TABLE quizzes (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   lesson_id bigint NOT NULL REFERENCES lessons (id),
@@ -145,7 +141,6 @@ CREATE TABLE exercises (
 );
 
 -- Social interaction
-
 CREATE TABLE discussions (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint NOT NULL REFERENCES users (id),
