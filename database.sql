@@ -5,8 +5,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 -- crypt('john_password', gen_salt('bf', 12))
 
 -- Add main entities to database schema
-
-CREATE TABLE lessons (
+CREATE TABLE Lessons (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   course_id bigint NOT NULL REFERENCES courses (id),
   name varchar(255) NOT NULL,
@@ -81,7 +80,6 @@ CREATE TABLE teaching_groups (
 );
 
 -- Add tables for user interaction with the platform
-
 CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
 CREATE TABLE enrollments (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -126,7 +124,6 @@ CREATE TABLE certificates (
 );
 
 -- Create additional content
-
 CREATE TABLE quizzes (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   lesson_id bigint NOT NULL REFERENCES lessons (id),
@@ -146,7 +143,6 @@ CREATE TABLE exercises (
 );
 
 -- Social interaction
-
 CREATE TABLE discussions (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint NOT NULL REFERENCES users (id),
