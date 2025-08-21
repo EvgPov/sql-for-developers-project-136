@@ -12,8 +12,8 @@ CREATE TABLE lessons (
   video_url varchar(255),
   position integer NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz NOT NULL,
-  deleted_at boolean NOT NULL DEFAULT false
+  updated_at timestamptz,
+  deleted_at timestamptz
 );
 
 CREATE TABLE courses (
@@ -21,8 +21,8 @@ CREATE TABLE courses (
   name varchar(255) NOT NULL,
   description text NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz NOT NULL,
-  deleted_at boolean NOT NULL DEFAULT false
+  updated_at timestamptz,
+  deleted_at timestamptz
 );
 
 CREATE TABLE modules (
@@ -31,8 +31,8 @@ CREATE TABLE modules (
   name varchar(255) NOT NULL,
   description text NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz NOT NULL,
-  deleted_at boolean NOT NULL DEFAULT false
+  updated_at timestamptz,
+  deleted_at timestamptz
 );
 
 CREATE TABLE course_modules (
@@ -48,13 +48,13 @@ CREATE TABLE programs (
   price numeric(10,2) NOT NULL,
   program_type varchar(255) NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz NOT NULL
+  updated_at timestamptz
 );
 
 CREATE TABLE program_modules (
   module_id bigint NOT NULL REFERENCES  modules (id),
   program_id bigint NOT NULL REFERENCES programs (id),
-  PRIMARY KEY (module_id, programs_id)
+  PRIMARY KEY (module_id, program_id)
 );
 
 -- Add users to database schema
@@ -67,15 +67,15 @@ CREATE TABLE users (
   teaching_group_id bigint NOT NULL REFERENCES teaching_groups (id),
   role user_role NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz NOT NULL,
-  deleted_at timestamptz NOT NULL
+  updated_at timestamptz,
+  deleted_at timestamptz
 );
 
 CREATE TABLE teaching_groups (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   slug varchar(255) NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz NOT NULL
+  updated_at timestamptz
 );
 
 -- Add tables for user interaction with the platform
@@ -87,7 +87,7 @@ CREATE TABLE enrollments (
   program_id bigint NOT NULL REFERENCES programs (id),
   status enrollments_status NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz NOT NULL
+  updated_at timestamptz
 );
 
 CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
@@ -98,7 +98,7 @@ CREATE TABLE payments (
   status  payment_status NOT NULL,
   paid_at timestamptz NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz NOT NULL
+  updated_at timestamptz
 );
 
 CREATE TYPE program_completions_status AS ENUM ('active', 'completed', 'pending', 'cancelled');
@@ -108,9 +108,9 @@ CREATE TABLE program_completions (
   program_id bigint NOT NULL REFERENCES programs (id),
   status program_completions_status NOT NULL,
   started_at timestamptz NOT NULL,
-  completed_at timestamptz NOT NULL
+  completed_at timestamptz,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz NOT NULL
+  updated_at timestamptz
 );
 
 CREATE TABLE certificates (
@@ -118,9 +118,9 @@ CREATE TABLE certificates (
   user_id bigint NOT NULL REFERENCES users (id),
   program_id bigint NOT NULL REFERENCES programs (id),
   url varchar(255) NOT NULL,
-  issued_at timestamptz NOT NULL,
+  issued_at timestamptz,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz NOT NULL
+  updated_at timestamptz
 );
 
 -- Create additional content
@@ -131,7 +131,7 @@ CREATE TABLE quizzes (
   name varchar(255) NOT NULL,
   content varchar(255) NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz NOT NULL
+  updated_at timestamptz
 );
 
 CREATE TABLE exercises (
@@ -140,7 +140,7 @@ CREATE TABLE exercises (
   name varchar(255) NOT NULL,
   url varchar(255) NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz NOT NULL
+  updated_at timestamptz
 );
 
 -- Social interaction
@@ -151,7 +151,7 @@ CREATE TABLE discussions (
   lesson_id bigint NOT NULL REFERENCES lessons (id),
   text text NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz NOT NULL
+  updated_at timestamptz
 );
 
 CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archived');
@@ -162,5 +162,5 @@ CREATE TABLE blogs (
   content text NOT NULL,
   status blog_status NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz NOT NULL
+  updated_at timestamptz
 );
