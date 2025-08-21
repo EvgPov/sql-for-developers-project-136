@@ -5,7 +5,16 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 -- crypt('john_password', gen_salt('bf', 12))
 
 -- Add main entities to database schema
-CREATE TABLE Lessons (
+CREATE TABLE courses (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  name varchar(255) NOT NULL,
+  description text NOT NULL,
+  created_at timestamptz NOT NULL,
+  updated_at timestamptz,
+  deleted_at timestamptz
+);
+
+CREATE TABLE lessons (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   course_id bigint NOT NULL REFERENCES courses (id),
   name varchar(255) NOT NULL,
@@ -17,16 +26,7 @@ CREATE TABLE Lessons (
   deleted_at timestamptz
 );
 
-CREATE TABLE Courses (
-  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  name varchar(255) NOT NULL,
-  description text NOT NULL,
-  created_at timestamptz NOT NULL,
-  updated_at timestamptz,
-  deleted_at timestamptz
-);
-
-CREATE TABLE Modules (
+CREATE TABLE modules (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   course_id bigint REFERENCES courses (id) NOT NULL,
   name varchar(255) NOT NULL,
@@ -36,13 +36,13 @@ CREATE TABLE Modules (
   deleted_at timestamptz
 );
 
-CREATE TABLE Course_Modules (
+CREATE TABLE course_modules (
   course_id bigint NOT NULL REFERENCES courses (id),
   module_id bigint NOT NULL REFERENCES  modules (id),
   PRIMARY KEY (course_id, module_id)
 );
 
-CREATE TABLE Programs (
+CREATE TABLE programs (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   module_id bigint REFERENCES modules (id) NOT NULL,
   name varchar(255) NOT NULL,
@@ -52,15 +52,22 @@ CREATE TABLE Programs (
   updated_at timestamptz
 );
 
-CREATE TABLE Program_Modules (
+CREATE TABLE program_modules (
   module_id bigint NOT NULL REFERENCES  modules (id),
   program_id bigint NOT NULL REFERENCES programs (id),
   PRIMARY KEY (module_id, program_id)
 );
 
 -- Add users to database schema
+CREATE TABLE teaching_groups (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  slug varchar(255) NOT NULL,
+  created_at timestamptz NOT NULL,
+  updated_at timestamptz
+);
+
 CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
-CREATE TABLE Users (
+CREATE TABLE users (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name varchar(255) NOT NULL,
   email varchar(255) UNIQUE NOT NULL,
@@ -72,16 +79,10 @@ CREATE TABLE Users (
   deleted_at timestamptz
 );
 
-CREATE TABLE TeachingGroups (
-  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  slug varchar(255) NOT NULL,
-  created_at timestamptz NOT NULL,
-  updated_at timestamptz
-);
-
 -- Add tables for user interaction with the platform
+
 CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
-CREATE TABLE Enrollments (
+CREATE TABLE enrollments (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint NOT NULL REFERENCES users (id),
   program_id bigint NOT NULL REFERENCES programs (id),
@@ -91,7 +92,7 @@ CREATE TABLE Enrollments (
 );
 
 CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
-CREATE TABLE Payments (
+CREATE TABLE payments (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   enrollment_id bigint NOT NULL REFERENCES enrollments (id),
   amount numeric(10, 2) NOT NULL,
@@ -102,7 +103,7 @@ CREATE TABLE Payments (
 );
 
 CREATE TYPE program_completions_status AS ENUM ('active', 'completed', 'pending', 'cancelled');
-CREATE TABLE ProgramCompletions (
+CREATE TABLE program_completions (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint NOT NULL REFERENCES users (id),
   program_id bigint NOT NULL REFERENCES programs (id),
@@ -113,7 +114,7 @@ CREATE TABLE ProgramCompletions (
   updated_at timestamptz
 );
 
-CREATE TABLE Certificates (
+CREATE TABLE certificates (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint NOT NULL REFERENCES users (id),
   program_id bigint NOT NULL REFERENCES programs (id),
@@ -124,7 +125,8 @@ CREATE TABLE Certificates (
 );
 
 -- Create additional content
-CREATE TABLE Quizzes (
+
+CREATE TABLE quizzes (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   lesson_id bigint NOT NULL REFERENCES lessons (id),
   name varchar(255) NOT NULL,
@@ -133,7 +135,7 @@ CREATE TABLE Quizzes (
   updated_at timestamptz
 );
 
-CREATE TABLE Exercises (
+CREATE TABLE exercises (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   lesson_id bigint NOT NULL REFERENCES lessons (id),
   name varchar(255) NOT NULL,
@@ -143,7 +145,8 @@ CREATE TABLE Exercises (
 );
 
 -- Social interaction
-CREATE TABLE Discussions (
+
+CREATE TABLE discussions (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint NOT NULL REFERENCES users (id),
   lesson_id bigint NOT NULL REFERENCES lessons (id),
@@ -153,7 +156,7 @@ CREATE TABLE Discussions (
 );
 
 CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archived');
-CREATE TABLE Blog (
+CREATE TABLE blogs (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint NOT NULL REFERENCES users (id),
   name varchar(255) NOT NULL,
