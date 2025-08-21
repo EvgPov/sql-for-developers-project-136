@@ -3,6 +3,7 @@ SET search_path TO public;
 -- enable the extension for password hashing
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
+CREATE TYPE program_type_type AS ENUM ('intensive', 'profession');
 CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
 CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
 CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
@@ -11,19 +12,19 @@ CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archi
 
 -- Add main entities to database schema
 CREATE TABLE courses (
-  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  id bigint PRIMARY KEY,
   name varchar(255) NOT NULL,
-  description text NOT NULL,
+  description text,
   created_at timestamptz NOT NULL,
   updated_at timestamptz,
   deleted_at timestamptz
 );
 
 CREATE TABLE lessons (
-  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  course_id bigint NOT NULL REFERENCES courses (id),
+  id bigint PRIMARY KEY,
+  course_id bigint NOT NULL REFERENCES courses (id) ON DELETE CASCADE,
   name varchar(255) NOT NULL,
-  content text NOT NULL,
+  content text,
   video_url varchar(255),
   position integer NOT NULL,
   created_at timestamptz NOT NULL,
@@ -32,33 +33,33 @@ CREATE TABLE lessons (
 );
 
 CREATE TABLE modules (
-  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  id bigint PRIMARY KEY,
   name varchar(255) NOT NULL,
-  description text NOT NULL,
+  description text,
   created_at timestamptz NOT NULL,
   updated_at timestamptz,
   deleted_at timestamptz
 );
 
 CREATE TABLE course_modules (
-  course_id bigint NOT NULL REFERENCES courses (id),
-  module_id bigint NOT NULL REFERENCES  modules (id),
-  PRIMARY KEY (course_id, module_id)
+  module_id bigint NOT NULL REFERENCES  modules (id) ON DELETE CASCADE,
+  course_id bigint NOT NULL REFERENCES courses (id) ON DELETE CASCADE
+  PRIMARY KEY (module_id, course_id)
 );
 
 CREATE TABLE programs (
-  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  id bigint PRIMARY KEY,
   name varchar(255) NOT NULL,
   price numeric(10,2) NOT NULL,
-  program_type varchar(255) NOT NULL,
+  program_type program_type_type NOT NULL,
   created_at timestamptz NOT NULL,
   updated_at timestamptz
 );
 
 CREATE TABLE program_modules (
-  module_id bigint NOT NULL REFERENCES  modules (id),
-  program_id bigint NOT NULL REFERENCES programs (id),
-  PRIMARY KEY (module_id, program_id)
+  program_id bigint NOT NULL REFERENCES programs (id) ON DELETE CASCADE,
+  module_id bigint NOT NULL REFERENCES  modules (id) ON DELETE CASCADE
+  PRIMARY KEY (program_id, module_id)
 );
 
 -- Add users to database schema
