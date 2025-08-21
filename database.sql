@@ -28,7 +28,7 @@ CREATE TABLE lessons (
 
 CREATE TABLE modules (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  course_id bigint REFERENCES courses (id) NOT NULL,
+  course_id bigint NOT NULL REFERENCES courses (id),
   name varchar(255) NOT NULL,
   description text NOT NULL,
   created_at timestamptz NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE course_modules (
 
 CREATE TABLE programs (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  module_id bigint REFERENCES modules (id) NOT NULL,
+  module_id bigint NOT NULL REFERENCES modules (id),
   name varchar(255) NOT NULL,
   price numeric(10,2) NOT NULL,
   program_type varchar(255) NOT NULL,
