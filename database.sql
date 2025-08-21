@@ -2,7 +2,7 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TYPE program_type_type AS ENUM ('intensive', 'profession');
-CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
+CREATE TYPE user_role AS ENUM ('Student', 'Teacher', 'Admin');
 CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
 CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
 CREATE TYPE program_completions_status AS ENUM ('active', 'completed', 'pending', 'cancelled');
@@ -73,7 +73,7 @@ CREATE TABLE users (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name varchar(255) NOT NULL,
   email varchar(255) UNIQUE NOT NULL,
-  password_hash varchar(255) UNIQUE NOT NULL,
+  password_hash varchar(255) NOT NULL,
   teaching_group_id bigint NOT NULL REFERENCES teaching_groups (id),
   role user_role NOT NULL,
   created_at timestamptz NOT NULL,
