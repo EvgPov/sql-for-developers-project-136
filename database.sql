@@ -12,9 +12,9 @@ CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archi
 CREATE TABLE courses (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name varchar(255) NOT NULL,
-  description text,
+  description text NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz,
+  updated_at timestamptz NOT NULL,
   deleted_at timestamptz
 );
 
@@ -22,11 +22,11 @@ CREATE TABLE lessons (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   course_id bigint NOT NULL REFERENCES courses (id),
   name varchar(255) NOT NULL,
-  content text,
+  content text NOT NULL,
   video_url varchar(255),
   position integer NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz,
+  updated_at timestamptz NOT NULL,
   deleted_at timestamptz
 );
 
@@ -35,7 +35,7 @@ CREATE TABLE modules (
   name varchar(255) NOT NULL,
   description text,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz,
+  updated_at timestamptz NOT NULL,
   deleted_at timestamptz
 );
 
@@ -51,7 +51,7 @@ CREATE TABLE programs (
   price numeric(10,2) NOT NULL,
   program_type program_type_type NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz
+  updated_at timestamptz NOT NULL
 );
 
 CREATE TABLE program_modules (
@@ -65,7 +65,7 @@ CREATE TABLE teaching_groups (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   slug varchar(255) NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz
+  updated_at timestamptz NOT NULL
 );
 
 
@@ -77,7 +77,7 @@ CREATE TABLE users (
   teaching_group_id bigint NOT NULL REFERENCES teaching_groups (id),
   role user_role NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz,
+  updated_at timestamptz NOT NULL,
   deleted_at timestamptz
 );
 
