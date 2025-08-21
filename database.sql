@@ -20,7 +20,7 @@ CREATE TABLE courses (
 
 CREATE TABLE lessons (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  course_id bigint NOT NULL REFERENCES courses (id) ON DELETE CASCADE,
+  course_id bigint NOT NULL REFERENCES courses (id),
   name varchar(255) NOT NULL,
   content text,
   video_url varchar(255),
@@ -55,8 +55,8 @@ CREATE TABLE programs (
 );
 
 CREATE TABLE program_modules (
-  program_id bigint NOT NULL REFERENCES programs (id) ON DELETE CASCADE,
-  module_id bigint NOT NULL REFERENCES  modules (id) ON DELETE CASCADE,
+  program_id bigint NOT NULL REFERENCES programs (id),
+  module_id bigint NOT NULL REFERENCES  modules (id),
   PRIMARY KEY (program_id, module_id)
 );
 
