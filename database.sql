@@ -17,7 +17,7 @@ CREATE TABLE Lessons (
   deleted_at timestamptz
 );
 
-CREATE TABLE courses (
+CREATE TABLE Courses (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name varchar(255) NOT NULL,
   description text NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE courses (
   deleted_at timestamptz
 );
 
-CREATE TABLE modules (
+CREATE TABLE Modules (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   course_id bigint REFERENCES courses (id) NOT NULL,
   name varchar(255) NOT NULL,
@@ -36,13 +36,13 @@ CREATE TABLE modules (
   deleted_at timestamptz
 );
 
-CREATE TABLE course_modules (
+CREATE TABLE Course_Modules (
   course_id bigint NOT NULL REFERENCES courses (id),
   module_id bigint NOT NULL REFERENCES  modules (id),
   PRIMARY KEY (course_id, module_id)
 );
 
-CREATE TABLE programs (
+CREATE TABLE Programs (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   module_id bigint REFERENCES modules (id) NOT NULL,
   name varchar(255) NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE programs (
   updated_at timestamptz
 );
 
-CREATE TABLE program_modules (
+CREATE TABLE Program_Modules (
   module_id bigint NOT NULL REFERENCES  modules (id),
   program_id bigint NOT NULL REFERENCES programs (id),
   PRIMARY KEY (module_id, program_id)
@@ -60,7 +60,7 @@ CREATE TABLE program_modules (
 
 -- Add users to database schema
 CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
-CREATE TABLE users (
+CREATE TABLE Users (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name varchar(255) NOT NULL,
   email varchar(255) UNIQUE NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE users (
   deleted_at timestamptz
 );
 
-CREATE TABLE teaching_groups (
+CREATE TABLE TeachingGroups (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   slug varchar(255) NOT NULL,
   created_at timestamptz NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE teaching_groups (
 
 -- Add tables for user interaction with the platform
 CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
-CREATE TABLE enrollments (
+CREATE TABLE Enrollments (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint NOT NULL REFERENCES users (id),
   program_id bigint NOT NULL REFERENCES programs (id),
@@ -91,7 +91,7 @@ CREATE TABLE enrollments (
 );
 
 CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
-CREATE TABLE payments (
+CREATE TABLE Payments (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   enrollment_id bigint NOT NULL REFERENCES enrollments (id),
   amount numeric(10, 2) NOT NULL,
@@ -102,7 +102,7 @@ CREATE TABLE payments (
 );
 
 CREATE TYPE program_completions_status AS ENUM ('active', 'completed', 'pending', 'cancelled');
-CREATE TABLE program_completions (
+CREATE TABLE ProgramCompletions (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint NOT NULL REFERENCES users (id),
   program_id bigint NOT NULL REFERENCES programs (id),
@@ -113,7 +113,7 @@ CREATE TABLE program_completions (
   updated_at timestamptz
 );
 
-CREATE TABLE certificates (
+CREATE TABLE Certificates (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint NOT NULL REFERENCES users (id),
   program_id bigint NOT NULL REFERENCES programs (id),
@@ -124,7 +124,7 @@ CREATE TABLE certificates (
 );
 
 -- Create additional content
-CREATE TABLE quizzes (
+CREATE TABLE Quizzes (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   lesson_id bigint NOT NULL REFERENCES lessons (id),
   name varchar(255) NOT NULL,
@@ -133,7 +133,7 @@ CREATE TABLE quizzes (
   updated_at timestamptz
 );
 
-CREATE TABLE exercises (
+CREATE TABLE Exercises (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   lesson_id bigint NOT NULL REFERENCES lessons (id),
   name varchar(255) NOT NULL,
@@ -143,7 +143,7 @@ CREATE TABLE exercises (
 );
 
 -- Social interaction
-CREATE TABLE discussions (
+CREATE TABLE Discussions (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint NOT NULL REFERENCES users (id),
   lesson_id bigint NOT NULL REFERENCES lessons (id),
@@ -153,7 +153,7 @@ CREATE TABLE discussions (
 );
 
 CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archived');
-CREATE TABLE blogs (
+CREATE TABLE Blog (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint NOT NULL REFERENCES users (id),
   name varchar(255) NOT NULL,
