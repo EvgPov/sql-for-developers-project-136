@@ -1,3 +1,5 @@
+SET search_path TO public;
+
 -- enable the extension for password hashing
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 -- crypt('john_password', gen_salt('bf', 12))
