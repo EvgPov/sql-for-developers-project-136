@@ -1,7 +1,7 @@
 -- enable the extension for password hashing
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
-CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
+CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed', 'invalid');
 CREATE TYPE user_role AS ENUM ('Student', 'Teacher', 'Admin');
 CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
 CREATE TYPE program_completions_status AS ENUM ('active', 'completed', 'pending', 'cancelled');
