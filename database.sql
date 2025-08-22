@@ -2,7 +2,7 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TYPE user_role AS ENUM ('Student', 'Teacher', 'Admin');
-CREATE TYPE enrollment_status AS ENUM  ('Active', 'Pending', 'Cancelled', 'Completed');
+CREATE TYPE enrollment_status AS ENUM  ('active', 'pending', 'cancelled', 'completed');
 CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
 CREATE TYPE program_completions_status AS ENUM ('active', 'completed', 'pending', 'cancelled');
 CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archived');
@@ -84,7 +84,7 @@ CREATE TABLE enrollments (
   id serial PRIMARY KEY,
   user_id bigint REFERENCES users (id) ON DELETE CASCADE,
   program_id bigint REFERENCES programs (id) ON DELETE CASCADE,
-  status enrollment_status,
+  status enrollment_status NOT NULL,
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL
 );
