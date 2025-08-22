@@ -10,7 +10,7 @@ CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archi
 
 -- Add main entities to database schema
 CREATE TABLE courses (
-  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  id serial PRIMARY KEY,
   name varchar(255) NOT NULL,
   description text NOT NULL,
   created_at timestamptz NOT NULL,
@@ -19,19 +19,19 @@ CREATE TABLE courses (
 );
 
 CREATE TABLE lessons (
-  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  course_id bigint NOT NULL REFERENCES courses (id),
+  id serial PRIMARY KEY,
+  course_id bigint NOT NULL REFERENCES courses (id) ON DELETE CASCEDE,
   name varchar(255) NOT NULL,
   content text NOT NULL,
   video_url varchar(255),
-  position integer NOT NULL,
+  position integer NOT NULL check (position >= 0),
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL,
   deleted_at timestamptz
 );
 
 CREATE TABLE modules (
-  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  id serial PRIMARY KEY,
   name varchar(255) NOT NULL,
   description text,
   created_at timestamptz NOT NULL,
@@ -39,14 +39,8 @@ CREATE TABLE modules (
   deleted_at timestamptz
 );
 
-CREATE TABLE course_modules (
-  module_id bigint NOT NULL REFERENCES modules (id),
-  course_id bigint NOT NULL REFERENCES courses (id),
-  PRIMARY KEY (module_id, course_id)
-);
-
 CREATE TABLE programs (
-  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  id serial PRIMARY KEY,
   name varchar(255) NOT NULL,
   price numeric(10,2) NOT NULL,
   program_type program_type_type NOT NULL,
@@ -58,6 +52,12 @@ CREATE TABLE program_modules (
   program_id bigint NOT NULL REFERENCES programs (id) ON DELETE CASCADE,
   module_id bigint NOT NULL REFERENCES modules (id) ON DELETE CASCADE,
   PRIMARY KEY (program_id, module_id)
+);
+
+CREATE TABLE course_modules (
+  module_id bigint NOT NULL REFERENCES modules (id) ON DELETE CASCADE,
+  course_id bigint NOT NULL REFERENCES courses (id) ON DELETE CASCADE,
+  PRIMARY KEY (module_id, course_id)
 );
 
 -- Add users to database schema
