@@ -1,7 +1,6 @@
 -- enable the extension for password hashing
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
--- CREATE TYPE program_type_type AS ENUM ('intensive', 'profession');
 CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
 CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
 CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
@@ -24,7 +23,7 @@ CREATE TABLE lessons (
   name varchar(255) NOT NULL,
   content text NOT NULL,
   video_url varchar(255),
-  position integer NOT NULL CHECK (position > 0) ON DELETE CASCADE DEFAULT 1,
+  position integer NOT NULL CHECK (position > 0) ON DELETE CASCADE,
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL,
   deleted_at timestamptz
