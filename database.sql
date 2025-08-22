@@ -64,8 +64,7 @@ CREATE TABLE teaching_groups (
   id serial PRIMARY KEY,
   slug varchar(255) NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz NOT NULL,
-  deleted_at timestamptz
+  updated_at timestamptz NOT NULL
 );
 
 
