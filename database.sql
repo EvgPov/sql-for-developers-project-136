@@ -67,7 +67,6 @@ CREATE TABLE teaching_groups (
   updated_at timestamptz NOT NULL
 );
 
-
 CREATE TABLE users (
   id serial PRIMARY KEY,
   teaching_group_id bigint REFERENCES teaching_groups (id) ON DELETE CASCADE,
@@ -83,24 +82,22 @@ CREATE TABLE users (
 -- Add tables for user interaction with the platform
 CREATE TABLE enrollments (
   id serial PRIMARY KEY,
-  user_id bigint REFERENCES users (id),
-  program_id bigint REFERENCES programs (id),
-  status enrollment_status NOT NULL,
+  user_id bigint REFERENCES users (id) ON DELETE CASCADE,
+  program_id bigint REFERENCES programs (id) ON DELETE CASCADE,
+  status enrollment_status,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz
+  updated_at timestamptz NOT NULL
 );
-
 
 CREATE TABLE payments (
-   id serial PRIMARY KEY,
-  enrollment_id bigint REFERENCES enrollments (id),
+  id serial PRIMARY KEY,
+  enrollment_id bigint REFERENCES enrollments (id) ON DELETE CASCADE,
   amount numeric(10, 2) NOT NULL,
-  status  payment_status NOT NULL,
+  status payment_status,
   paid_at timestamptz NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz
+  updated_at timestamptz NOT NULL
 );
-
 
 CREATE TABLE program_completions (
   id serial PRIMARY KEY,
@@ -110,7 +107,7 @@ CREATE TABLE program_completions (
   started_at timestamptz,
   completed_at timestamptz,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz
+  updated_at timestamptz NOT NULL
 );
 
 CREATE TABLE certificates (
