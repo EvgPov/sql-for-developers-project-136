@@ -42,7 +42,7 @@ CREATE TABLE programs (
   id serial PRIMARY KEY,
   name varchar(255) NOT NULL,
   price numeric(10,2) NOT NULL,
-  program_type  varchar(255) NOT NULL,
+  program_type varchar(255) NOT NULL,
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL
 );
@@ -82,8 +82,8 @@ CREATE TABLE users (
 -- Add tables for user interaction with the platform
 CREATE TABLE enrollments (
   id serial PRIMARY KEY,
-  user_id bigint REFERENCES users (id),
-  program_id bigint REFERENCES programs (id),
+  user_id bigint REFERENCES users (id) ON DELETE CASCADE,,
+  program_id bigint REFERENCES programs (id) ON DELETE CASCADE,,
   status enrollment_status,
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL
@@ -91,7 +91,7 @@ CREATE TABLE enrollments (
 
 CREATE TABLE payments (
   id serial PRIMARY KEY,
-  enrollment_id bigint REFERENCES enrollments (id),
+  enrollment_id bigint REFERENCES enrollments (id) ON DELETE CASCADE,
   amount numeric(10, 2) NOT NULL,
   status payment_status,
   paid_at timestamptz NOT NULL,
