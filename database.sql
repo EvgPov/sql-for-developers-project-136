@@ -1,7 +1,7 @@
 -- enable the extension for password hashing
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
-CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
+CREATE TYPE user_role AS ENUM ('Student', 'Teacher', 'Admin');
 CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
 CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
 CREATE TYPE program_completions_status AS ENUM ('active', 'completed', 'pending', 'cancelled');
@@ -64,7 +64,8 @@ CREATE TABLE teaching_groups (
   id serial PRIMARY KEY,
   slug varchar(255) NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz NOT NULL
+  updated_at timestamptz NOT NULL,
+  deleted_at timestamptz
 );
 
 
@@ -72,8 +73,8 @@ CREATE TABLE users (
   id serial PRIMARY KEY,
   teaching_group_id bigint REFERENCES teaching_groups (id) ON DELETE CASCADE,
   name varchar(255) NOT NULL,
-  email varchar(255) UNIQUE NOT NULL,
-  password_hash varchar(255) UNIQUE,
+  email varchar(255) NOT NULL,
+  password_hash varchar(255),
   role user_role NOT NULL,
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL,
