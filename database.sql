@@ -2,7 +2,7 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TYPE user_role AS ENUM ('Student', 'Teacher', 'Admin');
-CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed', 'invalid status');
+CREATE TYPE enrollment_status AS ENUM  ('active', 'pending', 'cancelled', 'completed');
 CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
 CREATE TYPE program_completions_status AS ENUM ('active', 'completed', 'pending', 'cancelled');
 CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archived');
