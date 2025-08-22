@@ -82,8 +82,8 @@ CREATE TABLE users (
 -- Add tables for user interaction with the platform
 CREATE TABLE enrollments (
   id serial PRIMARY KEY,
-  user_id bigint REFERENCES users (id) ON DELETE CASCADE,,
-  program_id bigint REFERENCES programs (id) ON DELETE CASCADE,,
+  user_id bigint REFERENCES users (id) ON DELETE CASCADE,
+  program_id bigint REFERENCES programs (id) ON DELETE CASCADE,
   status enrollment_status,
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL
