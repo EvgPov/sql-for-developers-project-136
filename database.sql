@@ -61,7 +61,7 @@ CREATE TABLE course_modules (
 
 -- Add users to database schema
 CREATE TABLE teaching_groups (
-  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  id serial PRIMARY KEY,
   slug varchar(255) NOT NULL,
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL
@@ -69,8 +69,8 @@ CREATE TABLE teaching_groups (
 
 
 CREATE TABLE users (
-  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  teaching_group_id bigint NOT NULL REFERENCES teaching_groups (id),
+  id serial PRIMARY KEY,
+  teaching_group_id bigint REFERENCES teaching_groups (id) ON DELETE CASCADE,
   name varchar(255) NOT NULL,
   email varchar(255) UNIQUE NOT NULL,
   password_hash varchar(255) UNIQUE,
