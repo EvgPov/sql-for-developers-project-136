@@ -24,7 +24,7 @@ CREATE TABLE lessons (
   name varchar(255) NOT NULL,
   content text NOT NULL,
   video_url varchar(255),
-  position integer NOT NULL CHECK (position > 0),
+  position integer NOT NULL CHECK (position > 0) ON DELETE CASCADE DEFAULT 1,
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL,
   deleted_at timestamptz
