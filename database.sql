@@ -20,7 +20,7 @@ CREATE TABLE courses (
 
 CREATE TABLE lessons (
   id serial PRIMARY KEY,
-  course_id bigint NOT NULL REFERENCES courses (id) ON DELETE CASCEDE,
+  course_id bigint NOT NULL REFERENCES courses (id) ON DELETE CASCADE,
   name varchar(255) NOT NULL,
   content text NOT NULL,
   video_url varchar(255),
