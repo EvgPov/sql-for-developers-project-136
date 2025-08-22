@@ -1,6 +1,7 @@
 -- enable the extension for password hashing
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
+CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
 CREATE TYPE user_role AS ENUM ('Student', 'Teacher', 'Admin');
 CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
 CREATE TYPE program_completions_status AS ENUM ('active', 'completed', 'pending', 'cancelled');
@@ -72,15 +73,13 @@ CREATE TABLE users (
   name varchar(255) NOT NULL,
   email varchar(255) NOT NULL,
   password_hash varchar(255),
-  role user_role NOT NULL,
+  role user_role,
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL,
   deleted_at timestamptz
 );
 
 -- Add tables for user interaction with the platform
-CREATE TYPE enrollment_status AS ENUM ('active', 'completed', 'pending', 'cancelled');
-
 CREATE TABLE enrollments (
   id serial PRIMARY KEY,
   user_id bigint REFERENCES users (id),
@@ -124,27 +123,27 @@ CREATE TABLE certificates (
 -- Create additional content
 CREATE TABLE quizzes (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  lesson_id bigint NOT NULL REFERENCES lessons (id),
+  lesson_id bigint REFERENCES lessons (id),
   name varchar(255) NOT NULL,
   content varchar(255) NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz
+  updated_at timestamptz NOT NULL
 );
 
 CREATE TABLE exercises (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  lesson_id bigint NOT NULL REFERENCES lessons (id),
+  lesson_id bigint REFERENCES lessons (id),
   name varchar(255) NOT NULL,
   url varchar(255) NOT NULL,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz
+  updated_at timestamptz NOT NULL
 );
 
 -- Social interaction
 CREATE TABLE discussions (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  user_id bigint NOT NULL REFERENCES users (id),
-  lesson_id bigint NOT NULL REFERENCES lessons (id),
+  user_id bigint REFERENCES users (id),
+  lesson_id bigint REFERENCES lessons (id),
   text text NOT NULL,
   created_at timestamptz NOT NULL,
   updated_at timestamptz
@@ -153,10 +152,10 @@ CREATE TABLE discussions (
 
 CREATE TABLE blogs (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  user_id bigint NOT NULL REFERENCES users (id),
+  user_id bigint REFERENCES users (id),
   name varchar(255) NOT NULL,
   content text NOT NULL,
-  status blog_status NOT NULL,
+  status blog_status,
   created_at timestamptz NOT NULL,
   updated_at timestamptz
 );
