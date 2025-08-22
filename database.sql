@@ -82,9 +82,9 @@ CREATE TABLE users (
 
 -- Add tables for user interaction with the platform
 CREATE TABLE enrollments (
-  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  user_id bigint NOT NULL REFERENCES users (id),
-  program_id bigint NOT NULL REFERENCES programs (id),
+  id serial PRIMARY KEY,
+  user_id bigint REFERENCES users (id),
+  program_id bigint REFERENCES programs (id),
   status enrollment_status NOT NULL,
   created_at timestamptz NOT NULL,
   updated_at timestamptz
@@ -92,8 +92,8 @@ CREATE TABLE enrollments (
 
 
 CREATE TABLE payments (
-  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  enrollment_id bigint NOT NULL REFERENCES enrollments (id),
+   id serial PRIMARY KEY,
+  enrollment_id bigint REFERENCES enrollments (id),
   amount numeric(10, 2) NOT NULL,
   status  payment_status NOT NULL,
   paid_at timestamptz NOT NULL,
@@ -103,21 +103,21 @@ CREATE TABLE payments (
 
 
 CREATE TABLE program_completions (
-  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  user_id bigint NOT NULL REFERENCES users (id),
-  program_id bigint NOT NULL REFERENCES programs (id),
+  id serial PRIMARY KEY,
+  user_id bigint REFERENCES users (id),
+  program_id bigint REFERENCES programs (id),
   status program_completions_status NOT NULL,
-  started_at timestamptz NOT NULL,
+  started_at timestamptz,
   completed_at timestamptz,
   created_at timestamptz NOT NULL,
   updated_at timestamptz
 );
 
 CREATE TABLE certificates (
-  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  user_id bigint NOT NULL REFERENCES users (id),
-  program_id bigint NOT NULL REFERENCES programs (id),
-  url varchar(255) NOT NULL,
+  id serial PRIMARY KEY,
+  user_id bigint REFERENCES users (id),
+  program_id bigint REFERENCES programs (id),
+  url varchar(255),
   issued_at timestamptz,
   created_at timestamptz NOT NULL,
   updated_at timestamptz
