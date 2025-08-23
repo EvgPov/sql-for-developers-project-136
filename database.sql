@@ -81,16 +81,16 @@ CREATE TABLE users (
 
 -- Add tables for user interaction with the platform
 CREATE TABLE enrollments (
-  id serial PRIMARY KEY,
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint REFERENCES users (id),
-  program_id bigint REFERENCES programs (id),
-  enrollment_status enrollment_status,
+  program_id bigint REFERENCES programs (id) ON DELETE CASCADE,
+  status enrollment_status,
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL
 );
 
 CREATE TABLE payments (
-  id serial PRIMARY KEY,
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   enrollment_id bigint REFERENCES enrollments (id),
   amount numeric(10, 2) NOT NULL,
   status payment_status,
