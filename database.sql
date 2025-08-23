@@ -39,7 +39,7 @@ CREATE TABLE modules (
 );
 
 CREATE TABLE programs (
-  id serial PRIMARY KEY,
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name varchar(255) NOT NULL,
   price numeric(10,2) NOT NULL,
   program_type varchar(255) NOT NULL,
