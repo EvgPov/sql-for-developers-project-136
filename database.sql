@@ -69,7 +69,7 @@ CREATE TABLE teaching_groups (
 
 CREATE TABLE users (
   id serial PRIMARY KEY,
-  teaching_group_id bigint REFERENCES teaching_groups (id) ON DELETE CASCADE,
+  teaching_group_id bigint REFERENCES teaching_groups (id),
   name varchar(255) NOT NULL,
   email varchar(255) NOT NULL,
   password_hash varchar(255),
