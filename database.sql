@@ -124,7 +124,7 @@ CREATE TABLE certificates (
 CREATE TABLE quizzes (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   lesson_id bigint NOT NULL REFERENCES lessons (id),
-  name varchar(255) NOT NULL,
+  name varchar(255),
   content JSONB,
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL
@@ -133,8 +133,8 @@ CREATE TABLE quizzes (
 CREATE TABLE exercises (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   lesson_id bigint NOT NULL REFERENCES lessons (id),
-  name varchar(255) NOT NULL,
-  url varchar(255) NOT NULL,
+  name varchar(255),
+  url varchar(255),
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL
 );
