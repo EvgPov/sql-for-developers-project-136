@@ -84,7 +84,7 @@ CREATE TABLE enrollments (
   id serial PRIMARY KEY,
   user_id bigint NOT NULL REFERENCES users (id) ON DELETE CASCADE,
   program_id bigint NOT NULL REFERENCES programs (id) ON DELETE CASCADE,
-  status enrollment_status,
+  status enrollment_status DEFAULT 'pending',
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL
 );
