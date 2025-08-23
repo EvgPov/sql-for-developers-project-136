@@ -84,7 +84,7 @@ CREATE TABLE enrollments (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint REFERENCES users (id),
   program_id bigint REFERENCES programs (id) ON DELETE CASCADE,
-  status enrollment_status,
+  status enrollment_status NOT NULL,
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL
 );
@@ -93,7 +93,7 @@ CREATE TABLE payments (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   enrollment_id bigint REFERENCES enrollments (id),
   amount numeric(10, 2) NOT NULL,
-  status payment_status,
+  status payment_status NOT NULL,
   paid_at timestamptz NOT NULL,
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL
