@@ -1,7 +1,7 @@
 -- enable the extension for password hashing
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
-CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed', '...');
+CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
 CREATE TYPE user_role AS ENUM ('Student', 'Teacher', 'Admin');
 CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
 CREATE TYPE program_completions_status AS ENUM ('active', 'completed', 'pending', 'cancelled');
@@ -82,18 +82,18 @@ CREATE TABLE users (
 -- Add tables for user interaction with the platform
 CREATE TABLE enrollments (
   id serial PRIMARY KEY,
-  user_id bigint REFERENCES users (id) ON DELETE CASCADE,
-  program_id bigint REFERENCES programs (id) ON DELETE CASCADE,
-  "status" enrollment_status,
+  user_id bigint NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+  program_id bigint NOT NULL REFERENCES programs (id) ON DELETE CASCADE,
+  status enrollment_status,
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL
 );
 
 CREATE TABLE payments (
   id serial PRIMARY KEY,
-  enrollment_id bigint REFERENCES enrollments (id) ON DELETE CASCADE,
+  enrollment_id NOT NULL bigint REFERENCES enrollments (id) ON DELETE CASCADE,
   amount numeric(10, 2) NOT NULL,
-  "status" payment_status,
+  status payment_status,
   paid_at timestamptz NOT NULL,
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL
@@ -101,8 +101,8 @@ CREATE TABLE payments (
 
 CREATE TABLE program_completions (
   id serial PRIMARY KEY,
-  user_id bigint REFERENCES users (id),
-  program_id bigint REFERENCES programs (id),
+  user_id bigint NOT NULL REFERENCES users (id),
+  program_id bigint NOT NULL REFERENCES programs (id),
   status program_completions_status,
   started_at timestamptz,
   completed_at timestamptz,
