@@ -1,8 +1,8 @@
 -- enable the extension for password hashing
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
-CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
 CREATE TYPE user_role AS ENUM ('Student', 'Teacher', 'Admin');
+CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
 CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
 CREATE TYPE program_completions_status AS ENUM ('active', 'completed', 'pending', 'cancelled');
 CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archived');
@@ -91,7 +91,7 @@ CREATE TABLE enrollments (
 
 CREATE TABLE payments (
   id serial PRIMARY KEY,
-  enrollment_id NOT NULL bigint REFERENCES enrollments (id) ON DELETE CASCADE,
+  enrollment_id bigint NOT NULL REFERENCES enrollments (id) ON DELETE CASCADE,
   amount numeric(10, 2) NOT NULL,
   status payment_status,
   paid_at timestamptz NOT NULL,
@@ -112,8 +112,8 @@ CREATE TABLE program_completions (
 
 CREATE TABLE certificates (
   id serial PRIMARY KEY,
-  user_id bigint REFERENCES users (id),
-  program_id bigint REFERENCES programs (id),
+  user_id bigint NOT NULL REFERENCES users (id),
+  program_id bigint NOT NULL REFERENCES programs (id),
   url varchar(255),
   issued_at timestamptz,
   created_at timestamptz NOT NULL,
