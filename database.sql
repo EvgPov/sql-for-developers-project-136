@@ -68,7 +68,7 @@ CREATE TABLE teaching_groups (
 );
 
 CREATE TABLE users (
-  id serial PRIMARY KEY,
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   teaching_group_id bigint REFERENCES teaching_groups (id) ON DELETE CASCADE,
   name varchar(255) NOT NULL,
   email varchar(255) NOT NULL,
