@@ -75,7 +75,7 @@ CREATE TABLE users (
   password_hash varchar(255),
   role user_role,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz NOT NULL
+  updated_at timestamptz NOT NULL,
   deleted_at timestamptz
 );
 
