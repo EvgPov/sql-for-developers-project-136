@@ -76,7 +76,7 @@ CREATE TABLE users (
   role user_role,
   created_at timestamptz NOT NULL,
   updated_at timestamptz NOT NULL
-  -- deleted_at timestamptz
+  deleted_at timestamptz
 );
 
 -- Add tables for user interaction with the platform
