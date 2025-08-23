@@ -18,7 +18,7 @@ CREATE TABLE courses (
 );
 
 CREATE TABLE lessons (
-  id serial PRIMARY KEY,
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   course_id bigint REFERENCES courses (id) ON DELETE CASCADE,
   name varchar(255) NOT NULL,
   content text NOT NULL,
