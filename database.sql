@@ -69,14 +69,14 @@ CREATE TABLE teaching_groups (
 
 CREATE TABLE users (
   id serial PRIMARY KEY,
-  teaching_group_id bigint REFERENCES teaching_groups (id),
+  teaching_group_id bigint REFERENCES teaching_groups (id) ON DELETE CASCADE,
   name varchar(255) NOT NULL,
   email varchar(255) NOT NULL,
   password_hash varchar(255),
   role user_role,
   created_at timestamptz NOT NULL,
-  updated_at timestamptz NOT NULL,
-  deleted_at timestamptz
+  updated_at timestamptz NOT NULL
+  -- deleted_at timestamptz
 );
 
 -- Add tables for user interaction with the platform
